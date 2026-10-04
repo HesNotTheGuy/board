@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Board</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <div id="app">
+      <div id="viewport" tabindex="-1">
+        <div id="world">
+          <div id="zones"></div>
+          <div id="items"></div>
+        </div>
+        <div id="overlay"></div>
+      </div>
+
+      <header id="titlebar" data-tauri-drag-region>
+        <div class="tb-left" data-tauri-drag-region>
+          <button id="home-button" class="mark-btn" type="button" title="All boards"><svg class="mark" viewBox="0 0 22 12" aria-hidden="true"><path d="M11 6 15.6 1.4h3.7L21 3.1v5.8l-1.7 1.7h-3.7L11 6 6.4 1.4H2.7L1 3.1v5.8l1.7 1.7h3.7z" /></svg></button>
+          <button id="board-name" class="project" type="button" title="Rename board">Board</button>
+          <span id="status" class="status" data-state="idle" data-tauri-drag-region><i></i><b></b></span>
+          <button id="move-board" class="topbar-btn" type="button" hidden title="Move this board into a project folder">Move to project…</button>
+        </div>
+        <div class="tb-right">
+          <button id="ai-chip" class="ai-chip" type="button" data-mode="off" title="MCP access: Off"><i></i><span>MCP</span></button>
+          <button id="pin-window" class="tb-icon" type="button" aria-pressed="false" title="Keep on top"></button>
+          <button id="open-settings" class="tb-icon" type="button" aria-expanded="false" title="Settings"></button>
+          <div class="win-controls">
+            <button id="win-min" class="win-btn" type="button" title="Minimize"></button>
+            <button id="win-max" class="win-btn" type="button" title="Maximize"></button>
+            <button id="win-close" class="win-btn close" type="button" title="Close"></button>
+          </div>
+        </div>
+      </header>
+      <section id="settings" class="settings" hidden aria-label="Settings"></section>
+
+      <nav id="toolbar" aria-label="Tools"></nav>
+      <aside id="inspector" aria-label="Inspector" hidden></aside>
+
+      <section id="welcome" hidden>
+        <div class="welcome-inner">
+          <h2 class="home-label">Start</h2>
+          <form id="new-board" class="new-board" autocomplete="off">
+            <input id="new-board-name" type="text" maxlength="80" spellcheck="false" placeholder="New board name" aria-label="New board name" />
+            <button class="btn-primary" type="submit">New board</button>
+          </form>
+          <button id="welcome-open" class="btn-secondary" type="button">Open project folder <kbd data-action="openFolder">Ctrl O</kbd></button>
+          <p id="browser-note" class="browser-note" hidden>
+            Browser preview: nothing is saved here. <a href="?demo">Open the demo board</a> or run the desktop app.
+          </p>
+          <p id="home-empty" class="home-empty" hidden>
+            Nothing yet. A new board is good for an idea with no project behind it; opening a project folder keeps
+            the board with that project.
+          </p>
+          <div class="home-lists">
+            <section hidden><h3>Your boards</h3><ul id="library-list" class="recents"></ul></section>
+            <section hidden><h3>Recent projects</h3><ul id="recents" class="recents"></ul></section>
+          </div>
+          <button id="home-back" class="home-back" type="button" hidden>Back to board <kbd>Esc</kbd></button>
+        </div>
+      </section>
+
+      <div id="hint" hidden>
+        <p class="hint-big"><em>Paste</em> or <em>drop</em> images</p>
+        <p class="hint-keys">
+          <span><kbd>Ctrl V</kbd> paste</span><span><kbd data-action="note">N</kbd> note</span><span><kbd data-action="zone">Z</kbd> zone</span
+          ><span><kbd data-action="pan">Space</kbd>+drag pan</span><span><kbd>Wheel</kbd> zoom</span>
+        </p>
+      </div>
+
+      <div id="tour" hidden></div>
+      <div id="toasts" aria-live="polite"></div>
+      <div id="drop-veil" hidden><span>Drop to add</span></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

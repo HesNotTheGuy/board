@@ -1,0 +1,30 @@
+{
+  "name": "@board/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server that lets any MCP client (LLM agents, image pipelines) see and add to a project's reference board.",
+  "license": "MIT",
+  "author": "HesNotTheGuy",
+  "type": "module",
+  "bin": {
+    "board-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --target=node20 --external:sharp --outfile=dist/index.js --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\"",
+    "test": "pnpm build && vitest run",
+    "typecheck": "tsc --noEmit",
+    "bench": "pnpm build && node scripts/bench.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "sharp": "^0.35.5",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@board/format": "workspace:*",
+    "@types/node": "^26.6.3",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

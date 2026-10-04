@@ -1,0 +1,45 @@
+[package]
+name = "board"
+version = "0.1.0"
+description = "A reference board that LLMs and image models can use over MCP"
+authors = ["HesNotTheGuy"]
+license = "MIT"
+repository = "https://github.com/HesNotTheGuy/board"
+edition = "2021"
+rust-version = "1.85"
+
+[lib]
+name = "board_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+notify = "8"
+sha2 = "0.10"
+percent-encoding = "2"
+# Pure-Rust decoders/encoders only: every image is decoded and re-encoded here
+# before it reaches the board, so no C image codecs touch untrusted bytes.
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
+# Downloads for images dragged in from a browser. OS TLS (SChannel/Security.framework/OpenSSL),
+# no proxy support so the private-address guard can't be bypassed.
+reqwest = { version = "0.13", default-features = false, features = ["native-tls"] }
+url = "2"
+tokio = { version = "1", features = ["net"] }
+# Deleting a board moves it to the Recycle Bin / Trash, never a permanent delete.
+trash = "5"
+
+[dev-dependencies]
+png = "0.18"
+tokio = { version = "1", features = ["rt", "net"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

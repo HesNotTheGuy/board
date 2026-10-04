@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# Tauri
+app/src-tauri/target/
+app/src-tauri/gen/schemas/
+
+# Boards created while developing this repo
+.board/
+
+# Personal terms for the PII guard (see scripts/check-pii.mjs). Never commit.
+.pii-denylist
