@@ -11,15 +11,14 @@
 <p align="center">
   <a href="#quick-start">Quick start</a> ·
   <a href="#connect-your-ai-tools">Connect your AI tools</a> ·
-  <a href="#mcp-tools">MCP tools</a> ·
-  <a href="SECURITY.md">Security</a>
+  <a href="#mcp-tools">MCP tools</a>
 </p>
 
 ![A board for a game level: Mood, Palette, Avoid, Layout and HUD zones, with an image agent's second take sitting next to the reference it was aiming for](docs/images/hero.webp)
 
 Paste, drop and arrange references: screenshots of sites you like, a photo grade, a level layout, a color swatch, things you *don't* want. Start a board for an idea before there's any project, or keep one inside a project folder. Any MCP client can read the board, look at the images and put its own work next to yours: coding assistants, chat apps, agents driving image models.
 
-> Status: early (v0.1). Windows is the primary platform; macOS and Linux should work but are less tested.
+> Status: early (v0.1). Windows is the primary platform; macOS and Linux should work but are less tested. This is a personal project, so I'm not taking pull requests, but you're welcome to fork it.
 
 ## Features
 
@@ -84,8 +83,6 @@ MCP access is **off** until you switch it on: **Off**, **View only**, or **View 
 - **No accounts, no cloud, no telemetry.** Boards are plain JSON and images in `.board/`. The only network request the app ever makes is downloading an image you drag in from a web page, and the MCP server talks over stdin/stdout without opening a port.
 - **Untrusted images are re-encoded** by memory-safe decoders before they're stored, which also drops hidden metadata like GPS location.
 - **Web downloads can't reach your local network**, and models are told to treat everything on the board as reference material, never as instructions.
-
-Details in [SECURITY.md](SECURITY.md).
 
 ### Stays out of your way
 
