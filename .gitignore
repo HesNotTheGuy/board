@@ -13,3 +13,7 @@ app/src-tauri/gen/schemas/
 
 # Personal terms for the PII guard (see scripts/check-pii.mjs). Never commit.
 .pii-denylist
+
+# Local verify-board evidence (screenshots, CDP dumps). May contain machine-specific
+# paths; keep the public-safe summary in .cursor/skills/verify-board/PROOF.md instead.
+.cursor/skills/verify-board/evidence/
