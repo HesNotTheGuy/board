@@ -642,7 +642,7 @@ async function cmdCleanup({ silent } = {}) {
   const result = {
     ok: true,
     removedRunDir: true,
-    evidenceKept: EVIDENCE_ROOT,
+    evidenceKept: '.cursor/skills/verify-board/evidence',
     chromeAlive: session ? pidAlive(session.chromePid) : false,
     viteAlive: session ? pidAlive(session.vitePid) : false,
   };
