@@ -26,12 +26,6 @@ Windows installer from `pnpm app:build --bundles nsis` lands in `app/src-tauri/t
 
 Your call. It’s plain JSON plus content-addressed images, so it diffs and merges reasonably. If your references are copyrighted or large, add `.board/` to the project’s `.gitignore`.
 
-## PII guard
-
-This repo is public. A git hook (`scripts/check-pii.mjs`, enabled by `pnpm install`) blocks commits that contain absolute home-directory paths, your OS username, or any email that isn’t a GitHub noreply address. Nothing personal is hardcoded in the script: it detects username and home folder at runtime. Extra private terms go in a gitignored `.pii-denylist` (see `.pii-denylist.example`). CI runs the same check on every push.
-
-Compiled programs can leak too: Rust embeds source paths of dependencies. `pnpm app:build` goes through `scripts/build-app.mjs`, which remaps those paths and fails the build if the home folder or username still shows up in the binary.
-
 ## See also
 
 [MCP](mcp.md) · [Using the board](using.md) · [Format](FORMAT.md) · [Roadmap](roadmap.md)

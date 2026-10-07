@@ -50,8 +50,6 @@ To delete a board, click the logo (top left) and use the trash button next to it
 
 No accounts, no cloud, no telemetry. Boards are plain JSON and images in `.board/`. The only network request the app makes is downloading an image you drag in from a web page. The MCP server talks over stdin/stdout without opening a port.
 
-Untrusted images are re-encoded by memory-safe decoders before they’re stored, which also drops hidden metadata like GPS. Web downloads can’t reach your local network. Models are told to treat everything on the board as reference material, never as instructions.
-
 A slim title bar instead of the system frame, **keep on top** (T), and **canvas opacity** that fades only the background so you can trace over whatever is behind the window. Pastes and new notes appear at a size that matches your current zoom. A short tour on first launch points out the controls.
 
 ## See also
