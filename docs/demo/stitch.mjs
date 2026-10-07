@@ -186,6 +186,16 @@ function clipFilter(p, fps) {
   );
 }
 
+/**
+ * Where the 16:9 caption (and its sub line) sit, at frame scale `s`. Bottom by default;
+ * `captionPos: "top"` for shots where the app's toasts (always bottom-left) would be covered.
+ */
+function wideY(shot, s) {
+  const px = (n) => Math.round(n * s);
+  if (shot.captionPos === 'top') return { cap: String(px(110)), sub: String(px(200)) };
+  return shot.sub ? { cap: `h-${px(250)}`, sub: `h-${px(150)}` } : { cap: `h-${px(190)}`, sub: `h-${px(150)}` };
+}
+
 /** A caption that fades in from `from` seconds and, if `to` is set, disappears after it. */
 function text(font, file, size, color, x, y, box, from = 0.3, to = null) {
   const b = box ? `:box=1:boxcolor=${BG}@0.86:boxborderw=${box}` : '';
@@ -211,9 +221,9 @@ function renderShot(p, ctx) {
 
   let wide = '[a]null';
   if (captions && caption) {
-    wide += sub
-      ? `,${text(fonts.serif, capFile, 54, INK, 96, 'h-250', 24)},${text(fonts.mono, subFile, 26, AMBER, 96, 'h-150', 16)}`
-      : `,${text(fonts.serif, capFile, 54, INK, 96, 'h-190', 24)}`;
+    const y = wideY(p.shot, 1);
+    wide += `,${text(fonts.serif, capFile, 54, INK, 96, y.cap, 24)}`;
+    if (sub) wide += `,${text(fonts.mono, subFile, 26, AMBER, 96, y.sub, 16)}`;
   }
   parts.push(`${wide}[wide]`);
 
@@ -375,8 +385,9 @@ function captionCut(manifest, opts) {
         draws.push(text(fonts.serif, cap, px(64), INK, px(80), px(V_CAP_Y), 0, c.from, c.to));
         if (sub) draws.push(text(fonts.mono, subFile, px(26), AMBER, px(80), px(V_CAP_Y + lines.length * 78 + 26), 0, c.from, c.to));
       } else {
-        draws.push(text(fonts.serif, cap, px(54), INK, px(96), `h-${px(sub ? 250 : 190)}`, px(24), c.from, c.to));
-        if (sub) draws.push(text(fonts.mono, subFile, px(26), AMBER, px(96), `h-${px(150)}`, px(16), c.from, c.to));
+        const y = wideY(c.shot, s);
+        draws.push(text(fonts.serif, cap, px(54), INK, px(96), y.cap, px(24), c.from, c.to));
+        if (sub) draws.push(text(fonts.mono, subFile, px(26), AMBER, px(96), y.sub, px(16), c.from, c.to));
       }
     });
   }

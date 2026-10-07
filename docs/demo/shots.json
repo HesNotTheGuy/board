@@ -1,5 +1,5 @@
 {
-  "$comment": "Shot list for the Board demo. Paths are relative to the repo root. Each shot uses the first source that exists: a take in the clips folder whose file name starts with `clip` (the beat number, so `07-end.mp4` and `07-fit-all.mov` both match), then each still in order. Takes: `in` skips seconds at the start, `speed` > 1 plays faster, the shot is always `dur` seconds (a short take holds its last frame). Stills: `from`/`to` are [centerX, centerY, zoom] as fractions of the image (after `crop`), eased over the shot; `crop` is [x, y, w, h] fractions, e.g. to drop browser chrome. `v` is the horizontal center (0..1 of the 16:9 frame) of the square window used for the 9:16 cut, or [start, end] to pan; the shot-level `v` applies to takes, the still-level one to that still. `clipCrop` is a default `crop` for every take.",
+  "$comment": "Shot list for the Board demo. Paths are relative to the repo root. Each shot uses the first source that exists: a take in the clips folder whose file name starts with `clip` (the beat number, so `07-end.mp4` and `07-fit-all.mov` both match), then each still in order. Takes: `in` skips seconds at the start, `speed` > 1 plays faster, the shot is always `dur` seconds (a short take holds its last frame). Stills: `from`/`to` are [centerX, centerY, zoom] as fractions of the image (after `crop`), eased over the shot; `crop` is [x, y, w, h] fractions, e.g. to drop browser chrome. `v` is the horizontal center (0..1 of the 16:9 frame) of the square window used for the 9:16 cut, or [start, end] to pan; the shot-level `v` applies to takes, the still-level one to that still. `clipCrop` is a default `crop` for every take. `captionPos: \"top\"` moves a shot's 16:9 caption to the top, for shots where the app's bottom-left toasts would sit under it.",
   "fps": 30,
   "crossfade": 0.35,
   "clipCrop": null,
@@ -57,6 +57,7 @@
     },
     {
       "id": "mcp-view-only",
+      "captionPos": "top",
       "clip": "05-",
       "dur": 5,
       "caption": "MCP access is off until you turn it on: view only, or view and add.",
@@ -70,6 +71,7 @@
     },
     {
       "id": "agent-add",
+      "captionPos": "top",
       "clip": "06-",
       "optional": true,
       "dur": 5,

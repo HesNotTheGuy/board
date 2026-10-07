@@ -27,7 +27,8 @@ Takes can run long: `in` (seconds to skip), `speed` and `dur` in `shots.json` tr
 3. **Recorder.** OBS: Window Capture of Board (Windows 10 1903+ capture method), canvas = output = the window size, 30 fps, recording format MP4 (or MKV, then remux), encoder x264 CRF 16 or NVENC CQ 18, cursor capture on. The built-in Snipping Tool recorder also works for single takes.
 4. **Settings to show.** Start with MCP access **Off** so the chip is grey for shot 5.
 5. **Pace.** Move the mouse slowly and in straight lines; pause half a second before each click and after each result. Start every take with 1 s of stillness and end with 1.5 s; the stitcher trims and crossfades.
-6. **Retakes are cheap.** Record each beat as its own file. Ctrl Z restores the board between attempts.
+6. **Cursor between takes.** The cursor jumps at each crossfade if one take ends where the next doesn't start. End each take with the cursor parked near where the next one begins (shot 5 ends near the bottom left, where shot 6's toast appears), or move it off the canvas at both ends.
+7. **Retakes are cheap.** Record each beat as its own file. Ctrl Z restores the board between attempts.
 
 ### An honest agent-add (shot 6)
 
