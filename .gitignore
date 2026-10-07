@@ -13,3 +13,8 @@ app/src-tauri/gen/schemas/
 
 # Personal terms for the PII guard (see scripts/check-pii.mjs). Never commit.
 .pii-denylist
+
+# Demo video: raw takes and renders (see docs/demo/)
+board-demo-clips/
+board-demo-clips-preview/
+docs/demo/out/

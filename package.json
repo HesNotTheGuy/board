@@ -19,6 +19,8 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "check:pii": "node scripts/check-pii.mjs --all"
+    "check:pii": "node scripts/check-pii.mjs --all",
+    "demo:stitch": "node docs/demo/stitch.mjs",
+    "demo:capture": "node docs/demo/capture-preview.mjs"
   }
 }

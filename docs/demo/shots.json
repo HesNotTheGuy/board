@@ -1,0 +1,96 @@
+{
+  "$comment": "Shot list for the Board demo. Paths are relative to the repo root. Each shot uses the first source that exists: a take in the clips folder whose file name starts with `clip`, then each still in order. Takes: `in` skips seconds at the start, `speed` > 1 plays faster, the shot is always `dur` seconds (a short take holds its last frame). Stills: `from`/`to` are [centerX, centerY, zoom] as fractions of the image (after `crop`), eased over the shot; `crop` is [x, y, w, h] fractions, e.g. to drop browser chrome. `v` is the horizontal center (0..1 of the 16:9 frame) of the square window used for the 9:16 cut, or [start, end] to pan; the shot-level `v` applies to takes, the still-level one to that still. `clipCrop` is a default `crop` for every take.",
+  "fps": 30,
+  "crossfade": 0.35,
+  "clipCrop": null,
+  "shots": [
+    {
+      "id": "open",
+      "clip": "01-open",
+      "dur": 3.8,
+      "caption": "An image board on an infinite canvas.",
+      "v": 0.5,
+      "in": 0.5,
+      "stills": [
+        { "src": "board-launch-shots/02-app-design-refs.png", "crop": [0, 0.072, 1, 0.928], "from": [0.5, 0.5, 1], "to": [0.5, 0.48, 1.05], "v": 0.3 },
+        { "src": "docs/images/hero.webp", "from": [0.5, 0.5, 1], "to": [0.5, 0.47, 1.06], "v": 0.4 }
+      ]
+    },
+    {
+      "id": "paste-drop",
+      "clip": "02-paste-drop",
+      "dur": 5.2,
+      "caption": "Paste or drop references: frames, screenshots, swatches.",
+      "v": [0.6, 0.72],
+      "in": 0.3,
+      "speed": 1.2,
+      "stills": [
+        { "src": "board-launch-shots/01-ai-storyboard.png", "crop": [0, 0.072, 1, 0.928], "from": [0.5, 0.42, 1], "to": [0.42, 0.36, 1.35], "v": 0.42 },
+        { "src": "docs/images/hero.webp", "from": [0.4, 0.4, 1.25], "to": [0.36, 0.33, 1.6], "v": 0.4 }
+      ]
+    },
+    {
+      "id": "zones",
+      "clip": "03-zones",
+      "dur": 4.6,
+      "caption": "Group them into zones. A zone named Avoid holds what you don't want.",
+      "v": 0.78,
+      "in": 0.2,
+      "speed": 1.15,
+      "stills": [
+        { "src": "board-launch-shots/02-app-design-refs.png", "crop": [0, 0.072, 1, 0.928], "from": [0.5, 0.45, 1.05], "to": [0.67, 0.27, 1.6], "v": 0.67 },
+        { "src": "docs/images/hero.webp", "from": [0.6, 0.4, 1.15], "to": [0.78, 0.4, 1.7], "v": 0.72 }
+      ]
+    },
+    {
+      "id": "focus-note",
+      "clip": "04-focus-note",
+      "dur": 5.2,
+      "caption": "Pin the ones that matter with Focus, and leave a note for the AI.",
+      "v": [0.5, 0.8],
+      "in": 0.2,
+      "speed": 1.15,
+      "stills": [
+        { "src": "board-launch-shots/01b-ai-storyboard-detail.png", "crop": [0, 0.072, 1, 0.928], "from": [0.62, 0.36, 1.1], "to": [0.78, 0.3, 1.45], "v": 0.82 },
+        { "src": "docs/images/notes.webp", "from": [0.26, 0.3, 1.7], "to": [0.86, 0.33, 1.7], "v": 0.82 }
+      ]
+    },
+    {
+      "id": "mcp-view-only",
+      "clip": "05-mcp-view-only",
+      "dur": 5,
+      "caption": "MCP access is off until you turn it on: view only, or view and add.",
+      "v": 0.86,
+      "in": 0.4,
+      "speed": 1.3,
+      "stills": [
+        { "src": "board-launch-shots/board-mcp-access-view-only.png", "from": [0.5, 0.5, 1], "to": [0.5, 0.45, 1.08], "v": 0.5 },
+        { "src": "docs/images/access.webp", "from": [0.5, 0.45, 1], "to": [0.5, 0.35, 1.12], "v": 0.5 }
+      ]
+    },
+    {
+      "id": "agent-add",
+      "clip": "06-agent-add",
+      "optional": true,
+      "dur": 5,
+      "caption": "A connected tool can put its attempt next to the reference it aimed for.",
+      "v": [0.25, 0.42],
+      "in": 0.6,
+      "speed": 1.25,
+      "stills": [
+        { "src": "docs/images/agent.webp", "from": [0.5, 0.5, 1], "to": [0.68, 0.45, 1.3], "v": 0.75 }
+      ]
+    },
+    {
+      "id": "fit-all",
+      "clip": "07-fit-all",
+      "dur": 4.8,
+      "caption": "Plain files on your machine. No account.",
+      "sub": "github.com/HesNotTheGuy/board",
+      "v": 0.5,
+      "stills": [
+        { "src": "docs/images/hero.webp", "from": [0.5, 0.48, 1.12], "to": [0.5, 0.5, 1], "v": 0.4 }
+      ]
+    }
+  ]
+}
