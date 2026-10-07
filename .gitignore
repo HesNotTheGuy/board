@@ -4,6 +4,13 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Demo video: raw takes and renders (see docs/demo/)
+board-demo-clips/
+board-demo-clips-v2/
+board-demo-refs/
+board-demo-clips-preview/
+docs/demo/out/
+
 # Tauri
 app/src-tauri/target/
 app/src-tauri/gen/schemas/

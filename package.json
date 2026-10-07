@@ -14,6 +14,8 @@
   "scripts": {
     "prepare": "node scripts/setup-hooks.mjs",
     "dev": "pnpm --filter @board/app dev",
+    "demo:stitch": "node docs/demo/stitch.mjs",
+    "demo:capture": "node docs/demo/capture-preview.mjs",
     "app": "pnpm --filter @board/app tauri dev",
     "app:build": "node scripts/build-app.mjs",
     "build": "pnpm -r build",
