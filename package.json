@@ -14,13 +14,13 @@
   "scripts": {
     "prepare": "node scripts/setup-hooks.mjs",
     "dev": "pnpm --filter @board/app dev",
+    "demo:stitch": "node docs/demo/stitch.mjs",
+    "demo:capture": "node docs/demo/capture-preview.mjs",
     "app": "pnpm --filter @board/app tauri dev",
     "app:build": "node scripts/build-app.mjs",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "check:pii": "node scripts/check-pii.mjs --all",
-    "demo:stitch": "node docs/demo/stitch.mjs",
-    "demo:capture": "node docs/demo/capture-preview.mjs"
+    "check:pii": "node scripts/check-pii.mjs --all"
   }
 }
