@@ -6,7 +6,7 @@ The one idea to get across: **you arrange references the way you think about the
 
 ## Shot list
 
-| # | Take file | In → out | On screen | Caption (burned in) |
+| # | Take (matched by number) | In → out | On screen | Caption (burned in) |
 | --- | --- | --- | --- | --- |
 | 1 | `01-open` | 0.0 → 3.8 | Home screen, click into a board. The board appears already fitted. | An image board on an infinite canvas. |
 | 2 | `02-paste-drop` | 3.5 → 8.7 | Ctrl V a reference, then drag a second one in from the browser or Explorer. Drag them into place. | Paste or drop references: frames, screenshots, swatches. |
@@ -30,7 +30,11 @@ Without shot 6 (`--skip-optional`) the cut is about 27 s.
 
 ## Voice-over (optional)
 
-Plain and unhurried, about 2.5 words a second. Each line fits inside its shot.
+Plain and unhurried, about 2.5 words a second. Each line fits inside its shot. There are two versions: one for the ~30 s stitched cut, and a slightly fuller one for a ~44 s cut where each beat runs about 6 s.
+
+For any cut, the cue times come from the `.srt` that `stitch.mjs` writes (`--onto` for a cut assembled elsewhere, see the README). Start each line on its cue.
+
+### ~30 s cut
 
 | Shot | Starts | Line |
 | --- | --- | --- |
@@ -42,7 +46,21 @@ Plain and unhurried, about 2.5 words a second. Each line fits inside its shot.
 | 6 | 22.1 | With view and add, a tool can put its attempt beside yours. |
 | 7 | 26.7 | It's plain files on your machine. Board is open source, on GitHub. |
 
-Record as one WAV, then `node docs/demo/stitch.mjs --vo vo.wav`. If a line runs long, raise that shot's `dur` rather than speeding up the read.
+### ~44 s cut
+
+About 15 words a beat, still one thought each.
+
+| Shot | Line |
+| --- | --- |
+| 1 | This is Board: an image board for the references you give an AI. |
+| 2 | Paste or drop whatever you're working from, frames, screenshots, a palette, and put it where it makes sense. |
+| 3 | Group references into zones and say in a line what each one is for. Avoid holds what you don't want. |
+| 4 | Pin the ones that matter most with Focus, and leave the model a short note. |
+| 5 | AI tools get nothing until you turn MCP access on. View only lets them read the board. |
+| 6 | With view and add, a tool can put its attempt right next to the reference it was aiming for. |
+| 7 | It's plain files on your machine, with no account. Board is open source, on GitHub. |
+
+Record as one WAV, then `node docs/demo/stitch.mjs --vo vo.wav` (or `--onto <cut> --vo vo.wav` for an assembled cut). If a line runs long, raise that shot's `dur` rather than speeding up the read; for an assembled cut, trim the line instead.
 
 No music is required. If you add some, keep it under the VO (around -24 LUFS for the bed) and mix it before passing the file to `--vo`.
 

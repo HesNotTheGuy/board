@@ -27,9 +27,22 @@ Useful options: `--clips <dir>`, `--stills-only` (ignore takes), `--skip-optiona
 
 Each shot uses the first source it finds: a take in the clips folder, then the stills listed for it in `shots.json`. The stills are real captures: the launch shots in `board-launch-shots/` if present, then the README images in `docs/images/`. So the cut always renders, and gets better as takes land.
 
+## Captions and VO for an assembled cut
+
+If the cut was already put together elsewhere (for example `board-demo-clips/00-demo-16x9.mp4` and `00-demo-9x16.mp4` next to the beat takes `01-…` to `07-…`), `stitch.mjs` can caption it without re-cutting:
+
+```bash
+node docs/demo/stitch.mjs --onto board-demo-clips/00-demo-16x9.mp4 --dry-run   # print the cue sheet
+node docs/demo/stitch.mjs --onto board-demo-clips/00-demo-16x9.mp4             # → docs/demo/out/00-demo-16x9.srt
+node docs/demo/stitch.mjs --onto board-demo-clips/00-demo-16x9.mp4 --burn      # also 00-demo-16x9-captioned.mp4
+node docs/demo/stitch.mjs --onto board-demo-clips/00-demo-9x16.mp4 --burn
+```
+
+There's one cue per shot, with the captions from `shots.json`. The timing comes from the lengths of the beat takes, scaled to the cut's length. That's exact when the cut is the takes back to back, and close when they were trimmed or crossfaded. When it isn't close enough, pass the real shot starts: `--starts 0,5.8,12.1,18.4,24.9,31.2,37.5`. `--burn` uses the same layout as the stitched cuts: lower-left box for 16:9, text in the top band for 9:16. If the 9:16 cut already has something in its top band, upload the `.srt` instead of burning. `--vo vo.wav` swaps in a voice-over (script in `STORYBOARD.md`, 44 s version).
+
 ## Status
 
-- The cut, captions, VO script and both aspect ratios are done and tested on Linux with ffmpeg 6.1.
-- `preview/` holds a full draft cut from browser-preview takes of the demo board (the title bar shows *Preview, not saved*). It's for judging pacing and framing, not for publishing.
-- The launch cut needs the desktop takes from `CAPTURE.md`, in `board-demo-clips/`. Once they're in, re-check `in` / `speed` / `dur` and the vertical `v` per shot with `--dry-run` and a render.
-- The still crops for `board-launch-shots/*.png` in `shots.json` were set from the shared captures and haven't been rendered yet; check them with `--stills-only` once those files are in the repo.
+- **Board's real capture is done:** a 44 s 16:9 cut, a 9:16 cut and beat takes `01` to `07`, assembled outside this repo. They aren't committed here. The remaining step is captions and VO for those cuts, using `--onto` above. I tested it on stand-in cuts built the same way, but not on Board's files.
+- The stitcher, captions, VO scripts (30 s and 44 s) and both aspect ratios work and were tested on Linux with ffmpeg 6.1. Use it to re-cut from the beat takes, e.g. a tighter 30 s version.
+- `preview/` holds a draft cut from browser-preview takes of the demo board (the title bar shows *Preview, not saved*). It's for comparing pacing, not for publishing.
+- The still crops for `board-launch-shots/*.png` in `shots.json` haven't been rendered. They only matter if a beat take is missing.

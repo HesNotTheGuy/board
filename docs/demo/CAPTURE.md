@@ -4,7 +4,7 @@ Every frame in the demo is the real app. This page covers how to film the seven 
 
 ## Naming and where takes go
 
-Put takes in `board-demo-clips/` at the repo root (gitignored). A take is matched by the start of its file name, so `03-zones.mp4`, `03-zones-take2.mov` and `03-zones_final.webm` all count; if there are several, the exact name wins, then the first alphabetically.
+Put takes in `board-demo-clips/` at the repo root (gitignored). A take is matched by its beat number at the start of the file name, so `03-zones.mp4`, `03-palette-take2.mov` and `07-end.webm` all count, and `00-…` files (assembled cuts) are ignored. If a number has several takes, the first alphabetically wins.
 
 | File | Beat |
 | --- | --- |
