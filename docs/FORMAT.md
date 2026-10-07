@@ -67,3 +67,7 @@ Per item or zone, by id:
 - edited on both sides → merged field by field; when the same field changed on both, the local side wins
 
 Undo and redo reuse the same merge (`merge(after, before, current)`), so undoing your move never removes an image an agent added in the meantime.
+
+## See also
+
+[MCP](mcp.md) · [Using the board](using.md) · [Develop](develop.md)
