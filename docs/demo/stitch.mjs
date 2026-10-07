@@ -3,7 +3,7 @@
 // real stills (slow push-in) where they don't, captions in the app's own fonts.
 // Writes a 16:9 and a 9:16 cut, an .srt sidecar and a contact sheet.
 //
-//   node docs/demo/stitch.mjs                 both cuts, clips from board-demo-clips/
+//   node docs/demo/stitch.mjs                 both cuts, clips from board-demo-clips-v2/
 //   node docs/demo/stitch.mjs --dry-run       show which source each shot will use
 //   node docs/demo/stitch.mjs --help          all options
 //
@@ -35,7 +35,7 @@ const AMBER = '0xf5a524';
 
 const HELP = `Usage: node docs/demo/stitch.mjs [options]
 
-  --clips <dir>       folder with recorded takes (default: board-demo-clips)
+  --clips <dir>       folder with recorded takes (default: board-demo-clips-v2)
   --out <dir>         output folder (default: docs/demo/out)
   --manifest <file>   shot list (default: docs/demo/shots.json)
   --format <f>        both | 16x9 | 9x16 (default: both)
@@ -57,7 +57,7 @@ Captioning a cut that was assembled elsewhere:
 `;
 
 function parseArgs(argv) {
-  const opts = { clips: 'board-demo-clips', out: 'docs/demo/out', manifest: 'docs/demo/shots.json', format: 'both' };
+  const opts = { clips: 'board-demo-clips-v2', out: 'docs/demo/out', manifest: 'docs/demo/shots.json', format: 'both' };
   const flags = new Set(['stills-only', 'skip-optional', 'no-captions', 'keep', 'dry-run', 'burn', 'help']);
   for (let i = 0; i < argv.length; i++) {
     const key = argv[i].replace(/^--/, '');

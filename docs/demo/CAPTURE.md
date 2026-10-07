@@ -4,7 +4,7 @@ Every frame in the demo is the real app. This page covers how to film the seven 
 
 ## Naming and where takes go
 
-Put takes in `board-demo-clips/` at the repo root (gitignored). A take is matched by its beat number at the start of the file name, so `03-zones.mp4`, `03-palette-take2.mov` and `07-end.webm` all count, and `00-…` files (assembled cuts) are ignored. If a number has several takes, the first alphabetically wins.
+Put takes in `board-demo-clips-v2/` at the repo root (gitignored). A take is matched by its beat number at the start of the file name, so `03-zones.mp4`, `03-palette-take2.mov` and `07-end.webm` all count, and `00-…` files (assembled cuts) are ignored. If a number has several takes, the first alphabetically wins.
 
 | File | Beat |
 | --- | --- |
@@ -14,7 +14,7 @@ Put takes in `board-demo-clips/` at the repo root (gitignored). A take is matche
 | `04-focus-note` | Focus pin + Note for AI |
 | `05-mcp-view-only` | MCP chip → View only |
 | `06-agent-add` | an AI tool adds an image (optional) |
-| `07-fit-all` | Shift 1 to the whole board, hold |
+| `07-end` | Shift 1 to the whole board, hold |
 
 Any missing take falls back to a still (see `shots.json`), so a partial set still renders. Run `node docs/demo/stitch.mjs --dry-run` to see which source each shot will use.
 
@@ -22,7 +22,7 @@ Takes can run long: `in` (seconds to skip), `speed` and `dur` in `shots.json` tr
 
 ## Windows (primary): the desktop app
 
-1. **Board.** Build and install the app (`pnpm app:build --bundles nsis`) or run `pnpm app`. Prepare one board in advance with the references from `board-launch-assets/` for the paste beat, plus a second, already-arranged board to cut to if a take goes wrong. Close the first-run tour before filming (it shows once; **Show the tour** in Settings brings it back if needed).
+1. **Board.** Build and install the app (`pnpm app:build --bundles nsis`) or run `pnpm app`. Prepare the board in advance from `board-demo-refs/`: an Avoid zone with the anti-reference already in it, and the mood, palette and layout images kept aside in Explorer for the paste and drop beat. Keep a second, fully arranged copy to cut to if a take goes wrong. Close the first-run tour before filming (it shows once; **Show the tour** in Settings brings it back if needed).
 2. **Window.** Maximize Board on a 1920x1080 display, or 2560x1440 if you want room for the MCP chip push-in. Turn off Windows notifications (Focus assist) and hide desktop icons. Keep **Keep on top** off.
 3. **Recorder.** OBS: Window Capture of Board (Windows 10 1903+ capture method), canvas = output = the window size, 30 fps, recording format MP4 (or MKV, then remux), encoder x264 CRF 16 or NVENC CQ 18, cursor capture on. The built-in Snipping Tool recorder also works for single takes.
 4. **Settings to show.** Start with MCP access **Off** so the chip is grey for shot 5.
@@ -36,7 +36,7 @@ This shows a real MCP call landing in the open app. No API keys or accounts are 
 
 1. Build the server once: `pnpm --filter @board/mcp build`.
 2. In the app, open the board's **project folder** (Ctrl O), so the board lives in `<project>/.board/`. Set MCP access to **View & add**.
-3. Pick the image to add: a real second attempt at the focused reference (a re-grade, a later screenshot, an image you generated earlier). Don't use an image you'd be uncomfortable presenting as the tool's output.
+3. Pick the image to add: a real second attempt at the focused reference, such as another generated variant of that mood image. Label it with what actually made it (`--name`); "Image agent" fits an image model's output.
 4. Start recording, then in a terminal (off screen, or on screen if you want to show the call):
 
    ```bash
@@ -76,4 +76,4 @@ Board is public, so check every take, still and the final cuts frame by frame fo
 - tokens or keys in any terminal shown on screen;
 - references you don't have the right to show.
 
-`board-demo-clips/` and `docs/demo/out/` are gitignored; `pnpm check:pii` covers text files but not pixels.
+`board-demo-clips-v2/`, `board-demo-refs/` and `docs/demo/out/` are gitignored; `pnpm check:pii` covers text files but not pixels.
