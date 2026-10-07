@@ -66,14 +66,3 @@ It needs Linux with X11, `google-chrome` (or `CHROME=…`), `ffmpeg`, `xdotool` 
 Its agent-add take uses the preview's built-in simulation (`__boardDemo.agentAdds()`), labelled "Demo Agent", because the in-memory backend can't receive MCP calls. For a launch cut, replace it with a desktop take as above.
 
 To film the preview by hand instead (any OS): open Chrome with `--app=http://localhost:1420/?demo` so there's no tab strip or address bar, and record just that window. If a take does include browser chrome, set `clipCrop` (or a shot's `crop`) in `shots.json` to cut it off, e.g. `[0, 0.072, 1, 0.928]` drops the top 7.2%.
-
-## Before anything is published
-
-Board is public, so check every take, still and the final cuts frame by frame for:
-
-- usernames, home folders or project paths (window titles, the **Recent** list on the home screen, terminal prompts, Explorer breadcrumbs);
-- email addresses, notifications, other windows or tabs;
-- tokens or keys in any terminal shown on screen;
-- references you don't have the right to show.
-
-`board-demo-clips-v2/`, `board-demo-refs/` and `docs/demo/out/` are gitignored; `pnpm check:pii` covers text files but not pixels.
