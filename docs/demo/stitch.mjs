@@ -47,15 +47,22 @@ const HELP = `Usage: node docs/demo/stitch.mjs [options]
   --mono <font>       small-label font (default: Martian Mono from app/node_modules)
   --keep              keep the intermediate per-shot renders
   --dry-run           print the plan and exit
+
+Captioning a cut that was assembled elsewhere:
+  --onto <cut.mp4>    write an .srt for that cut (one cue per shot, timed from the
+                      beat takes in --clips, scaled to the cut's length)
+  --starts <list>     exact shot start times instead, e.g. 0,5.8,12.1,... (one per shot)
+  --burn              also write <cut>-captioned.mp4 (16:9 or 9:16 layout, from its shape)
+  --vo <file>         with --onto: replace the cut's audio with this voice-over
 `;
 
 function parseArgs(argv) {
   const opts = { clips: 'board-demo-clips', out: 'docs/demo/out', manifest: 'docs/demo/shots.json', format: 'both' };
-  const flags = new Set(['stills-only', 'skip-optional', 'no-captions', 'keep', 'dry-run', 'help']);
+  const flags = new Set(['stills-only', 'skip-optional', 'no-captions', 'keep', 'dry-run', 'burn', 'help']);
   for (let i = 0; i < argv.length; i++) {
     const key = argv[i].replace(/^--/, '');
     if (flags.has(key)) opts[key] = true;
-    else if (['clips', 'out', 'manifest', 'format', 'vo', 'serif', 'mono'].includes(key) && argv[i + 1]) opts[key] = argv[++i];
+    else if (['clips', 'out', 'manifest', 'format', 'vo', 'serif', 'mono', 'onto', 'starts'].includes(key) && argv[i + 1]) opts[key] = argv[++i];
     else throw new Error(`Unknown option ${argv[i]}\n\n${HELP}`);
   }
   if (!['both', '16x9', '9x16'].includes(opts.format)) throw new Error('--format must be both, 16x9 or 9x16');
@@ -179,11 +186,11 @@ function clipFilter(p, fps) {
   );
 }
 
-const fadeIn = `alpha='min(1,max(0,(t-0.3)/0.35))'`;
-
-function text(font, file, size, color, x, y, box) {
+/** A caption that fades in from `from` seconds and, if `to` is set, disappears after it. */
+function text(font, file, size, color, x, y, box, from = 0.3, to = null) {
   const b = box ? `:box=1:boxcolor=${BG}@0.86:boxborderw=${box}` : '';
-  return `drawtext=fontfile=${font}:textfile=${file}:expansion=none:fontsize=${size}:fontcolor=${color}:line_spacing=14${b}:x=${x}:y=${y}:${fadeIn}`;
+  const when = to === null ? '' : `:enable='between(t,${f3(from)},${f3(to)})'`;
+  return `drawtext=fontfile=${font}:textfile=${file}:expansion=none:fontsize=${size}:fontcolor=${color}:line_spacing=14${b}:x=${x}:y=${y}:alpha='min(1,max(0,(t-${f3(from)})/0.35))'${when}`;
 }
 
 function renderShot(p, ctx) {
@@ -292,10 +299,106 @@ function contactSheet(video, steps, xf, out, work) {
   run(FFMPEG, ['-v', 'error', '-y', '-start_number', '1', '-i', 'sheet-%02d.png', '-vf', `tile=${cols}x${rows}:padding=8:margin=8:color=${BG}`, '-frames:v', '1', out], work);
 }
 
+/** Fresh work folder with the caption fonts copied in, so filters can name them without paths. */
+function prepareWork(out, opts) {
+  const work = path.join(out, '.work');
+  rmSync(work, { recursive: true, force: true });
+  mkdirSync(work, { recursive: true });
+  const fontDir = (pkg) => fromRepo(`app/node_modules/@fontsource/${pkg}/files`);
+  const serif = findFont(opts.serif, [path.join(fontDir('instrument-serif'), 'instrument-serif-latin-400-normal.woff'), ...systemFonts('Georgia.ttf', 'georgia.ttf', 'DejaVuSerif.ttf')], 'serif');
+  const mono = findFont(opts.mono, [path.join(fontDir('martian-mono'), 'martian-mono-latin-400-normal.woff'), ...systemFonts('consola.ttf', 'Menlo.ttc', 'DejaVuSansMono.ttf')], 'mono');
+  const fonts = { serif: `serif${path.extname(serif)}`, mono: `mono${path.extname(mono)}` };
+  copyFileSync(serif, path.join(work, fonts.serif));
+  copyFileSync(mono, path.join(work, fonts.mono));
+  return { work, fonts };
+}
+
+/**
+ * Captions for a cut assembled elsewhere: one cue per shot, timed from the beat takes'
+ * lengths (scaled to the cut's length) or from explicit --starts. Writes an .srt and,
+ * with --burn, a captioned copy in the same layout as the stitched cuts.
+ */
+function captionCut(manifest, opts) {
+  const cut = fromCwd(opts.onto);
+  const info = probe(cut);
+  const shots = manifest.shots.filter((s) => !(opts['skip-optional'] && s.optional));
+  let beats;
+  if (opts.starts) {
+    const starts = opts.starts.split(',').map(Number);
+    if (starts.length !== shots.length || starts.some(Number.isNaN)) throw new Error(`--starts needs ${shots.length} comma-separated times in seconds, one per shot`);
+    beats = shots.map((shot, i) => ({ shot, start: starts[i] }));
+  } else {
+    const found = shots.map((shot) => ({ shot, clip: findClip(fromCwd(opts.clips), shot.clip) })).filter((b) => b.clip);
+    if (!found.length) throw new Error(`No beat takes in ${opts.clips} to time the captions from. Pass --clips or --starts.`);
+    const durs = found.map((b) => probe(b.clip).duration);
+    const sum = durs.reduce((a, b) => a + b, 0);
+    const k = info.duration / sum;
+    if (Math.abs(k - 1) > 0.02) console.warn(`! beat takes add up to ${f3(sum)}s but the cut is ${f3(info.duration)}s; spreading the difference evenly. Pass --starts for exact times.`);
+    let t = 0;
+    beats = found.map((b, i) => {
+      const start = t;
+      t += durs[i] * k;
+      return { ...b, start };
+    });
+  }
+  const cues = beats.map((b, i) => {
+    const last = i === beats.length - 1;
+    return { shot: b.shot, from: b.start + 0.3, to: (last ? info.duration - 0.6 : beats[i + 1].start - 0.2) };
+  });
+
+  console.log(`Captions for ${rel(cut)} (${f3(info.duration)}s):`);
+  for (const c of cues) console.log(`  ${f3(c.from).padStart(6)} → ${f3(c.to).padStart(6)}  ${c.shot.id.padEnd(14)} ${c.shot.caption}`);
+  if (opts['dry-run']) return;
+
+  const out = fromCwd(opts.out);
+  mkdirSync(out, { recursive: true });
+  const base = path.parse(cut).name;
+  const srt = cues.map((c, i) => `${i + 1}\n${srtTime(c.from)} --> ${srtTime(c.to)}\n${[c.shot.caption, c.shot.sub].filter(Boolean).join('\n')}\n`);
+  writeFileSync(path.join(out, `${base}.srt`), srt.join('\n'));
+  console.log(`→ ${rel(path.join(out, `${base}.srt`))}`);
+  if (!opts.burn && !opts.vo) return;
+
+  const { work, fonts } = prepareWork(out, opts);
+  const tall = info.height > info.width;
+  const s = info.width / (tall ? VW : W);
+  const px = (n) => Math.round(n * s);
+  const draws = [];
+  if (opts.burn) {
+    cues.forEach((c, i) => {
+      const { caption, sub } = c.shot;
+      const cap = `cap-${i}.txt`;
+      const subFile = `sub-${i}.txt`;
+      const lines = tall ? wrap(caption, 28) : [caption];
+      writeFileSync(path.join(work, cap), lines.join('\n'));
+      writeFileSync(path.join(work, subFile), sub ?? '');
+      if (tall) {
+        draws.push(text(fonts.serif, cap, px(64), INK, px(80), px(V_CAP_Y), 0, c.from, c.to));
+        if (sub) draws.push(text(fonts.mono, subFile, px(26), AMBER, px(80), px(V_CAP_Y + lines.length * 78 + 26), 0, c.from, c.to));
+      } else {
+        draws.push(text(fonts.serif, cap, px(54), INK, px(96), `h-${px(sub ? 250 : 190)}`, px(24), c.from, c.to));
+        if (sub) draws.push(text(fonts.mono, subFile, px(26), AMBER, px(96), `h-${px(150)}`, px(16), c.from, c.to));
+      }
+    });
+  }
+  const file = path.join(out, `${base}-${opts.burn ? 'captioned' : 'vo'}.mp4`);
+  const args = ['-v', 'error', '-y', '-i', cut];
+  if (opts.vo) args.push('-i', fromCwd(opts.vo));
+  const graph = [`[0:v]${draws.length ? draws.join(',') : 'null'}[v]`];
+  if (opts.vo) graph.push(`[1:a]apad,atrim=duration=${f3(info.duration)}[a]`);
+  args.push('-filter_complex', graph.join(';'), '-map', '[v]');
+  if (opts.vo) args.push('-map', '[a]', '-c:a', 'aac', '-b:a', '160k');
+  else args.push('-map', '0:a?', '-c:a', 'copy');
+  args.push('-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', file);
+  run(FFMPEG, args, work);
+  console.log(`→ ${rel(file)}`);
+  if (!opts.keep) rmSync(work, { recursive: true, force: true });
+}
+
 function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.help) return console.log(HELP);
   const manifest = JSON.parse(readFileSync(fromCwd(opts.manifest), 'utf8'));
+  if (opts.onto) return captionCut(manifest, opts);
   const fps = manifest.fps ?? 30;
   const xf = manifest.crossfade ?? 0.35;
   const steps = plan(manifest, opts);
@@ -311,16 +414,7 @@ function main() {
   if (opts['dry-run']) return;
 
   const out = fromCwd(opts.out);
-  const work = path.join(out, '.work');
-  rmSync(work, { recursive: true, force: true });
-  mkdirSync(work, { recursive: true });
-
-  const fontDir = (pkg) => fromRepo(`app/node_modules/@fontsource/${pkg}/files`);
-  const serif = findFont(opts.serif, [path.join(fontDir('instrument-serif'), 'instrument-serif-latin-400-normal.woff'), ...systemFonts('Georgia.ttf', 'georgia.ttf', 'DejaVuSerif.ttf')], 'serif');
-  const mono = findFont(opts.mono, [path.join(fontDir('martian-mono'), 'martian-mono-latin-400-normal.woff'), ...systemFonts('consola.ttf', 'Menlo.ttc', 'DejaVuSansMono.ttf')], 'mono');
-  const fonts = { serif: `serif${path.extname(serif)}`, mono: `mono${path.extname(mono)}` };
-  copyFileSync(serif, path.join(work, fonts.serif));
-  copyFileSync(mono, path.join(work, fonts.mono));
+  const { work, fonts } = prepareWork(out, opts);
 
   const formats = opts.format === 'both' ? ['16x9', '9x16'] : [opts.format];
   const ctx = { work, fps, fonts, formats, captions: !opts['no-captions'], vo: opts.vo ? fromCwd(opts.vo) : null };
