@@ -251,12 +251,6 @@ pnpm test
 pnpm typecheck
 ```
 
-## Building in public: the PII guard
-
-This repo is public, so a git hook (`scripts/check-pii.mjs`, enabled automatically by `pnpm install`) blocks commits containing absolute home-directory paths, your OS username, or any email that isn't a GitHub noreply address. Nothing personal is hardcoded in the script: it detects your username and home folder at runtime, and you can list extra private terms in a gitignored `.pii-denylist` (see `.pii-denylist.example`). CI runs the same check on every push.
-
-Compiled programs can leak too: Rust embeds the source paths of its dependencies, which live under your home folder. `pnpm app:build` goes through `scripts/build-app.mjs`, which remaps those paths at build time and fails the build if your home folder or username still shows up in the binary.
-
 ## Roadmap
 
 - Arrows and markup on images
