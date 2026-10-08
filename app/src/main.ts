@@ -18,7 +18,7 @@ import { Tour } from './tour';
 import { BoardView, isEditableTarget } from './view';
 
 // Paths of recent project folders and the last open board live only in this
-// machine's webview storage, never in the repo.
+// machine's webview storage, never in board files.
 const RECENTS_KEY = 'board.recents';
 const LAST_KEY = 'board.last';
 const MAX_RECENTS = 6;

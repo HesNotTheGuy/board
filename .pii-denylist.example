@@ -1,4 +1,0 @@
-# Copy to `.pii-denylist` (gitignored) and add one personal term per line:
-# real name, personal email, street, employer, machine name...
-# The PII guard already catches your OS username, home directory and any
-# non-noreply git email automatically, so you don't need to list those.
