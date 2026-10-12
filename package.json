@@ -13,6 +13,8 @@
   },
   "scripts": {
     "dev": "pnpm --filter @board/app dev",
+    "demo:stitch": "node docs/demo/stitch.mjs",
+    "demo:capture": "node docs/demo/capture-preview.mjs",
     "app": "pnpm --filter @board/app tauri dev",
     "app:build": "pnpm --filter @board/app tauri build",
     "build": "pnpm -r build",
